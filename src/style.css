@@ -57,6 +57,7 @@ body {
   width: 95vw;
   margin: auto;
   padding-top: 2em;
+  max-width: 600px;
 }
 
 .btn {
