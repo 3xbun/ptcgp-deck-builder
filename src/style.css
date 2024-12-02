@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap');
+
+:root {
+  /* Background Colors */
+  --background-color: #121212;
+  /* Main background */
+  --card-area-color: #1E1E1E;
+  /* Card area background */
+
+  /* Accent Colors */
+  --primary-accent: #FFCC00;
+  /* Pokémon yellow */
+  --secondary-accent: #0075BE;
+  /* Pokémon blue */
+  --error-color: #FF3E3E;
+  /* Red for errors or highlights */
+
+  /* Text Colors */
+  --primary-text: #FFFFFF;
+  /* Main text color */
+  --secondary-text: #B0B0B0;
+  /* Subdued text color */
+  --link-color: #00CFFF;
+  /* Clickable link color */
+
+  /* Button Colors */
+  --primary-button-bg: #FFCC00;
+  /* Primary button background */
+  --primary-button-text: #121212;
+  /* Primary button text */
+  --secondary-button-bg: #0075BE;
+  /* Secondary button background */
+  --secondary-button-text: #FFFFFF;
+  /* Secondary button text */
+
+  /* Border and Divider Colors */
+  --border-color: #2E2E2E;
+  /* Card borders or general borders */
+  --divider-color: #3E3E3E;
+  /* Dividers between sections */
+}
+
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Noto Sans Thai", serif;
+  background-color: var(--background-color);
+  color: var(--primary-text);
+}
+
+.container {
+  width: 95vw;
+  margin: auto;
+  padding-top: 2em;
+}
+
+.btn {
+  background-color: var(--primary-button-bg);
+  color: var(--primary-button-text);
+  padding: .5em;
+  border-radius: .5em
+}
+
+input {
+  color: var(--primary-text);
+  background-color: var(--card-area-color);
+  border: none;
+  padding: .5em;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+li {
+  list-style: none;
+}
