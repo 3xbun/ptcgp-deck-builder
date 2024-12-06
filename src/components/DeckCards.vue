@@ -24,7 +24,7 @@ import { computed, inject, ref } from 'vue';
 
 const deck = inject('deck')
 const results = inject('results')
-const showDeck = ref(false)
+const showDeck = ref(true)
 
 const filterDeck = computed(() => {
   const cards = deck.value.cards;
