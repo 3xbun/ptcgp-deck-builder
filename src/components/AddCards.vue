@@ -35,12 +35,12 @@
 </template>
 
 <script setup>
-import { inject, ref, watch } from 'vue';
+import { inject, provide, ref, watch } from 'vue';
 import axios from 'axios';
 
 const showFilter = ref(false)
 const name = ref('')
-const results = ref([])
+const results = inject('results')
 const deck = inject('deck')
 
 watch(name, (text) => {

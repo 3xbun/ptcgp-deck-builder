@@ -2,7 +2,7 @@
   <div>
     <div class="cards" v-if="showDeck">
       <ul>
-        <li v-for="card in filterDeck">
+        <li v-for="card in filterDeck" @click="getPokemon(card)">
           <img :src="getImage(card)" alt="" class="card">
           <div class="counter">{{ counter(card) }}</div>
         </li>
@@ -19,9 +19,11 @@
 </template>
 
 <script setup>
+import axios from 'axios';
 import { computed, inject, ref } from 'vue';
 
 const deck = inject('deck')
+const results = inject('results')
 const showDeck = ref(false)
 
 const filterDeck = computed(() => {
@@ -46,6 +48,16 @@ const getImage = (cardID) => {
 const counter = (cardID) => {
   const cards = deck.value.cards;
   return cards.filter(card => card.cardID == cardID).length
+}
+
+const getPokemon = (cardID) => {
+  const set = cardID.split("_")
+  console.log(`https://pocket.limitlesstcg.com/api/dm/cards?q=${set[0]}~${set[1]}&lang=en`);
+  console.log(results);
+  axios.get(`https://pocket.limitlesstcg.com/api/dm/cards?q=${set[0]}~${Number(set[1])}&lang=en`).then(res => {
+    console.log(res.data);
+    results.value = res.data;
+  })
 }
 </script>
 

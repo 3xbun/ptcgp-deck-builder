@@ -22,7 +22,10 @@ const deck = ref({
   cards: []
 })
 
+const results = ref([])
+
 provide('deck', deck)
+provide('results', results)
 
 onMounted(() => {
   if (localStorage.getItem('deck')) {
