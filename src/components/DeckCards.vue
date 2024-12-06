@@ -27,7 +27,8 @@ const results = inject('results')
 const showDeck = ref(true)
 
 const filterDeck = computed(() => {
-  const cards = deck.value.cards;
+  const cards = deck.value.cards.sort((a, b) => (a.type > b.type) ? 1 : ((b.type > a.type) ? -1 : 0)).sort((a, b) => (a.cardID > b.cardID) ? 1 : ((b.cardID > a.cardID) ? -1 : 0));
+
   const uniq = [];
 
   cards.forEach(card => {
@@ -53,7 +54,6 @@ const counter = (cardID) => {
 const getPokemon = (cardID) => {
   const set = cardID.split("_")
   axios.get(`https://pocket.limitlesstcg.com/api/dm/cards?q=${set[0]}~${Number(set[1])}&lang=en`).then(res => {
-    console.log(res.data);
     results.value = res.data;
   })
 }
