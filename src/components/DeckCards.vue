@@ -52,8 +52,6 @@ const counter = (cardID) => {
 
 const getPokemon = (cardID) => {
   const set = cardID.split("_")
-  console.log(`https://pocket.limitlesstcg.com/api/dm/cards?q=${set[0]}~${set[1]}&lang=en`);
-  console.log(results);
   axios.get(`https://pocket.limitlesstcg.com/api/dm/cards?q=${set[0]}~${Number(set[1])}&lang=en`).then(res => {
     console.log(res.data);
     results.value = res.data;
