@@ -16,16 +16,14 @@
     <div class="results">
       <ul>
         <li v-for="item in results">
-          <div class="overlay" v-if="counter(`${item.set}_${String(item.number).padStart(3, '0')}`)">
-            {{ counter(`${item.set}_${String(item.number).padStart(3, '0')}`) }}/2
+          <div class="overlay" v-if="counter(item)">
+            {{ counter(item) }}/2
             <div class="control">
-              <i class="fa-light fa-circle-minus"
-                @click="removeCard(`${item.set}_${String(item.number).padStart(3, '0')}`)"></i>
-              <i class="fa-light fa-circle-plus"
-                @click="addCard(item.name, `${item.set}_${String(item.number).padStart(3, '0')}`)"></i>
+              <i class="fa-light fa-circle-minus" @click="removeCard(item)"></i>
+              <i class="fa-light fa-circle-plus" @click="addCard(item)"></i>
             </div>
           </div>
-          <img @click="addCard(item.name, `${item.set}_${String(item.number).padStart(3, '0')}`)"
+          <img @click="addCard(item)"
             :src="`https://limitlesstcg.nyc3.digitaloceanspaces.com/pocket/${item.set}/${item.set}_${String(item.number).padStart(3, '0')}_EN.webp`"
             alt="" class="card">
         </li>
@@ -52,28 +50,30 @@ watch(name, (text) => {
   }
 })
 
-const addCard = (name, cardID) => {
+const addCard = (card) => {
   const cards = deck.value.cards
 
   if (cards.length < 20) {
-    cards.filter(card => card.name == name).length < 2 ? cards.push({ name: name, cardID: cardID }) : null
+    if (cards.filter(c => c.name == card.name).length < 2) {
+      cards.push(card)
+    }
   }
 }
 
-const removeCard = (cardID) => {
+const removeCard = (card) => {
   const cards = deck.value.cards
 
-  const index = cards.findIndex(item => item.cardID === cardID);
+  const index = cards.findIndex(item => item.id === card.id);
 
-  console.log(index);
   if (index !== -1) {
     cards.splice(index, 1); // Remove one item at the found index
   }
 }
 
-const counter = (cardID) => {
+const counter = (card) => {
   const cards = deck.value.cards
-  return cards.filter(card => card.cardID == cardID).length
+  card.id = card.id || card.data_id
+  return cards.filter(c => c.id == card.id).length
 }
 </script>
 

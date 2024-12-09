@@ -27,33 +27,32 @@ const results = inject('results')
 const showDeck = ref(true)
 
 const filterDeck = computed(() => {
-  const cards = deck.value.cards.sort((a, b) => (a.type > b.type) ? 1 : ((b.type > a.type) ? -1 : 0)).sort((a, b) => (a.cardID > b.cardID) ? 1 : ((b.cardID > a.cardID) ? -1 : 0));
+  const cards = deck.value.cards.sort((a, b) => (a.card_type > b.card_type) ? 1 : ((b.card_type > a.card_type) ? -1 : 0)).sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
 
   const uniq = [];
 
   cards.forEach(card => {
-    if (!uniq.includes(card.cardID)) {
-      uniq.push(card.cardID)
+    if (!uniq.some(c => c.id == card.id)) {
+      uniq.push(card)
     }
   });
 
   return uniq
 })
 
-const getImage = (cardID) => {
-  const set = cardID.split("_")[0]
+const getImage = (card) => {
+  const cardID = `${card.set}_${String(card.number).padStart(3, '0')}`
 
-  return `https://limitlesstcg.nyc3.digitaloceanspaces.com/pocket/${set}/${cardID}_EN.webp`
+  return `https://limitlesstcg.nyc3.digitaloceanspaces.com/pocket/${card.set}/${cardID}_EN.webp`
 }
 
-const counter = (cardID) => {
+const counter = (card) => {
   const cards = deck.value.cards;
-  return cards.filter(card => card.cardID == cardID).length
+  return cards.filter(c => c.id == card.id).length
 }
 
-const getPokemon = (cardID) => {
-  const set = cardID.split("_")
-  axios.get(`https://pocket.limitlesstcg.com/api/dm/cards?q=${set[0]}~${Number(set[1])}&lang=en`).then(res => {
+const getPokemon = (card) => {
+  axios.get(`https://pocket.limitlesstcg.com/api/dm/cards?q=${card.set}~${card.number}&lang=en`).then(res => {
     results.value = res.data;
   })
 }
