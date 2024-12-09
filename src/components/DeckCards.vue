@@ -66,6 +66,7 @@ const getPokemon = (card) => {
 .cards ul {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   gap: .5em
 }
 
