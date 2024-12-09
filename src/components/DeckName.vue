@@ -13,17 +13,21 @@
       </p>
       <i class="fa-light fa-floppy-disk"></i>
     </div>
-    <div class="btn copy" @click="copyToClipboard">
+    <div class="btn success" v-if="isCopied">
+      <i class="fa-thin fa-circle-check"></i>
+    </div>
+    <div class="btn copy" v-else @click="copyToClipboard">
       <i class="fa-light fa-copy"></i>
     </div>
   </header>
 </template>
 
 <script setup>
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
 
 const deck = inject('deck')
 const deckText = inject('deckText')
+const isCopied = ref(false)
 
 const reset = () => {
   deck.value = {
@@ -39,8 +43,11 @@ const save = () => {
 }
 
 const copyToClipboard = () => {
-  // console.log(deckText.value);
   navigator.clipboard.writeText(deckText.value);
+  isCopied.value = true
+  setTimeout(() => {
+    isCopied.value = false
+  }, 2000);
 }
 </script>
 
@@ -79,9 +86,16 @@ input {
 }
 
 .copy {
-  border: 2px solid var(--primary-text);
-  color: var(--primary-text);
   background-color: transparent;
   width: 10%;
+  border: 2px solid var(--primary-text);
+  color: var(--primary-text);
+}
+
+.success {
+  width: 10%;
+  border: 2px solid transparent;
+  background-color: #59b259;
+  color: inherit;
 }
 </style>
