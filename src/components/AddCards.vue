@@ -55,6 +55,8 @@ const addCard = (card) => {
 
   if (cards.length < 20) {
     if (cards.filter(c => c.name == card.name).length < 2) {
+      const cardID = `${card.set}_${String(card.number).padStart(3, '0')}`
+      card.cardID = cardID
       cards.push(card)
     }
   }
@@ -63,7 +65,7 @@ const addCard = (card) => {
 const removeCard = (card) => {
   const cards = deck.value.cards
 
-  const index = cards.findIndex(item => item.id === card.id);
+  const index = cards.findIndex(item => item.cardID === card.cardID);
 
   if (index !== -1) {
     cards.splice(index, 1); // Remove one item at the found index
@@ -71,9 +73,11 @@ const removeCard = (card) => {
 }
 
 const counter = (card) => {
-  const cards = deck.value.cards
-  card.id = card.id || card.data_id
-  return cards.filter(c => c.id == card.id).length
+  const cards = deck.value.cards;
+  const cardID = `${card.set}_${String(card.number).padStart(3, '0')}`
+  card.cardID = cardID
+  console.log(card);
+  return cards.filter(c => c.cardID == card.cardID).length
 }
 </script>
 

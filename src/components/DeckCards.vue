@@ -32,7 +32,7 @@ const filterDeck = computed(() => {
   const uniq = [];
 
   cards.forEach(card => {
-    if (!uniq.some(c => c.id == card.id)) {
+    if (!uniq.some(c => c.cardID == card.cardID)) {
       uniq.push(card)
     }
   });
@@ -66,8 +66,8 @@ const getPokemon = (card) => {
 .cards ul {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: .5em
+  justify-content: space-evenly;
+  gap: .5em;
 }
 
 li {
