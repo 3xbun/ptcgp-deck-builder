@@ -48,7 +48,7 @@ const getImage = (card) => {
 
 const counter = (card) => {
   const cards = deck.value.cards;
-  return cards.filter(c => c.id == card.id).length
+  return cards.filter(c => c.cardID == card.cardID).length
 }
 
 const getPokemon = (card) => {
