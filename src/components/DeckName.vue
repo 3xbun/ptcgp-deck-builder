@@ -13,7 +13,7 @@
       </p>
       <i class="fa-light fa-floppy-disk"></i>
     </div>
-    <div class="btn success" v-if="isCopied">
+    <div class="btn success animate__animated animate__rubberBand" v-if="isCopied">
       <i class="fa-thin fa-circle-check"></i>
     </div>
     <div class="btn copy" v-else @click="copyToClipboard">
@@ -46,7 +46,13 @@ const copyToClipboard = () => {
   navigator.clipboard.writeText(deckText.value);
   isCopied.value = true
   setTimeout(() => {
-    isCopied.value = false
+    const element = document.querySelector('div.success')
+    console.log(element);
+    element.classList.add('animate__bounceOut')
+
+    setTimeout(() => {
+      isCopied.value = false
+    }, 550);
   }, 2000);
 }
 </script>
