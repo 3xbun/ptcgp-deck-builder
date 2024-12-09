@@ -3,6 +3,7 @@
 
     <h3>
       ตัวสร้างเด็ค Pokémon TCG Pocket
+      <span> v{{ version }}</span>
     </h3>
 
     <DeckName />
@@ -12,6 +13,7 @@
 </template>
 
 <script setup>
+import { version } from '../package.json';
 import { computed, onMounted, provide, ref } from 'vue';
 import DeckName from './components/DeckName.vue';
 import DeckCards from './components/DeckCards.vue';
@@ -72,4 +74,9 @@ onMounted(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+span {
+  font-size: .8rem;
+  color: var(--divider-color)
+}
+</style>
