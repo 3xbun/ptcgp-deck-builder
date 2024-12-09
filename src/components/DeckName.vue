@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <header>
     <input type="text" placeholder="ชื่อเด็ค" v-model="deck.name">
     <div class="btn reset" @click="reset()">
       <p>
@@ -16,7 +16,7 @@
     <div class="btn copy" @click="copyToClipboard">
       <i class="fa-light fa-copy"></i>
     </div>
-  </div>
+  </header>
 </template>
 
 <script setup>
@@ -45,7 +45,7 @@ const copyToClipboard = () => {
 </script>
 
 <style scoped>
-div {
+header {
   display: flex;
   margin-top: 1em;
   gap: .5em;
@@ -60,6 +60,7 @@ input {
   width: 20%;
   text-align: center;
   display: flex;
+  gap: .2em;
   align-items: center;
   justify-content: center;
   border-radius: .5em;
