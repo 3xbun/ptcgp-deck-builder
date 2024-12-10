@@ -18,10 +18,16 @@
     </div>
     <div class="btn copy" v-else @click="share()"><i class="fa-light fa-share-from-square"></i>
       <div class="dropdown" v-if="showDropDown">
-        <p @click="shareAsText">คัดลอกเป็นข้อความ</p>
+        <p @click="shareAsText">คัดลอกข้อความ</p>
         <hr>
-        <p @click="shareAslink">แชร์ผ่านลิงก์</p>
+        <p @click="shareAslink">คัดลอกลิงก์</p>
       </div>
+    </div>
+    <div class="notification" v-if="noti">
+      <p class="animate__animated animate__bounceInUp">
+        {{ noti }}คัดลอกสำเร็จ!
+        <i class="fa-light fa-clipboard-check"></i>
+      </p>
     </div>
   </header>
 </template>
@@ -33,6 +39,7 @@ const deck = inject('deck')
 const deckText = inject('deckText')
 const isCopied = ref(false)
 const showDropDown = ref(false)
+const noti = ref('')
 
 const reset = () => {
   deck.value = {
@@ -79,14 +86,21 @@ const shareAslink = () => {
 
   const enc = btoa(d)
 
-  // showDropDown.value = false
+  showNotification('ลิงก์')
   navigator.clipboard.writeText(window.location.href + "share=" + enc);
 }
 
 const shareAsText = () => {
-  // showDropDown.value = false
+  showNotification('ข้อความ')
   navigator.clipboard.writeText(deckText.value);
   console.log(showDropDown.value);
+}
+
+const showNotification = (value) => {
+  noti.value = value
+  setTimeout(() => {
+    noti.value = ""
+  }, 2000);
 }
 </script>
 
@@ -162,5 +176,26 @@ hr {
 
 .dropdown p:hover {
   background-color: var(--divider-color);
+}
+
+.notification {
+  position: fixed;
+  bottom: 0;
+  height: 20vh;
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.notification p {
+  width: max-content;
+  margin: auto;
+  padding: .5em;
+  background-color: #59b259;
+  filter: opacity(.9);
+  border-radius: .5em;
 }
 </style>
