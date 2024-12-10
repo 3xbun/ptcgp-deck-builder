@@ -98,9 +98,9 @@ const shareAsText = () => {
 
 const showNotification = (value) => {
   noti.value = value
-  setTimeout(() => {
-    noti.value = ""
-  }, 2000);
+  // setTimeout(() => {
+  //   noti.value = ""
+  // }, 2000);
 }
 </script>
 
@@ -182,7 +182,8 @@ hr {
   position: fixed;
   bottom: 0;
   height: 20vh;
-  width: 100%;
+  left: 0;
+  right: 0;
   text-align: center;
   overflow: hidden;
   display: flex;
