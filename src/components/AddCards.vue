@@ -11,6 +11,14 @@
     </div>
     <div class="filter" v-if="isShowFilter">
       <div class="animate__animated animate__faster animate__fadeInDown">
+        <p>ประเภทการ์ด</p>
+        <div class="types">
+          <p class="btn" :class="{ active: filter.type == 'pokemon' }" @click="filter.type = 'pokemon'">โปเกมอน</p>
+          <p class="btn" :class="{ active: filter.type == 'trainer' }" @click="filter.type = 'trainer'">เทรนเนอร์</p>
+          <p class="btn" :class="{ active: filter.type == 'supporter' }" @click="filter.type = 'supporter'">
+            ซัพพอร์ตเตอร์</p>
+          <p class="btn" :class="{ active: filter.type == 'item' }" @click="filter.type = 'item'">ไอเท็ม</p>
+        </div>
         <p>สี</p>
         <div class="colors">
           <img :class="{ active: filter.color == 'grass' }" @click="filter.color = 'grass'"
@@ -36,13 +44,16 @@
         </div>
         <div class="btns">
           <p class="btn" @click="searchWithFilter()">ค้นหาด้วยตัวกรอง</p>
-          <p class="btn reset" @click="filter.color = ''">ล้างตัวกรอง</p>
+          <p class="btn reset" @click="filter = {
+            color: '',
+            type: ''
+          }">ล้างตัวกรอง</p>
         </div>
       </div>
     </div>
 
     <div class="results">
-      <ul>
+      <ul v-if="results.length > 0">
         <li v-for="item in results">
           <div class="overlay" v-if="counter(item)">
             {{ counter(item) }}/2
@@ -56,6 +67,10 @@
             alt="" class="card">
         </li>
       </ul>
+      <div class="errors" v-else>
+        <p v-if="name">ไม่พบการค้นหา</p>
+        <p v-else>ค้นหาชื่อการ์ดที่ต้องการ</p>
+      </div>
     </div>
   </div>
 </template>
@@ -70,11 +85,24 @@ const deck = inject('deck')
 const isShowFilter = ref(false)
 
 const filter = ref({
-  color: ''
+  color: '',
+  type: ''
 })
 
 const searchWithFilter = () => {
-  const link = `https://pocket.limitlesstcg.com/api/dm/search?q=${name.value}%20${filter.value.color ? 'type%3A' + filter.value.color : ''}&lang=en`
+  const type = filter.value.type
+  const color = filter.value.color
+
+  let link = `https://pocket.limitlesstcg.com/api/dm/search?q=${name.value}%20`
+
+  if (type || color) {
+    link += 'type%3A'
+  }
+
+  type ? link += type : null
+  type && color ? link += '%2B' : null
+  color ? link += color : null
+
   axios.get(link).then(res => { results.value = res.data })
 }
 
@@ -117,7 +145,6 @@ const counter = (card) => {
   const cards = deck.value.cards;
   const cardID = `${card.set}_${String(card.number).padStart(3, '0')}`
   card.cardID = cardID
-  console.log(card);
   return cards.filter(c => c.cardID == card.cardID).length
 }
 </script>
@@ -142,6 +169,27 @@ input {
   background-color: black;
   padding: 1em;
   overflow: hidden;
+}
+
+.types {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 1em;
+}
+
+.types p {
+  width: 49%;
+  margin: 0 0 .5em;
+  border: 2px solid var(--divider-color);
+  background-color: transparent;
+  color: var(--divider-color);
+}
+
+.types p.active {
+  border: 2px solid transparent;
+  background-color: var(--primary-button-bg);
+  color: var(--primary-button-text);
 }
 
 .colors {
@@ -223,6 +271,12 @@ img {
   width: 100%;
   padding: 1rem;
   background-color: var(--secondary-button-bg);
+}
+
+.errors {
+  margin-top: 1em;
+  text-align: center;
+  color: var(--divider-color);
 }
 
 @media only screen and (max-width: 768px) {
