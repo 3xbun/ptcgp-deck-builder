@@ -2,15 +2,43 @@
   <div>
     <h2>เพิ่มการ์ด</h2>
     <input type="text" placeholder="ค้นหาการ์ด" v-model="name">
-    <div class="btn" @click="showFilter = !showFilter">
+    <div class="btn" @click="showFilter()">
       <p>
         ตัวกรอง
       </p>
-      <i class="fa-light fa-chevron-up" v-if="showFilter"></i>
+      <i class="fa-light fa-chevron-up" v-if="isShowFilter"></i>
       <i class="fa-light fa-chevron-down" v-else></i>
     </div>
-    <div class="filter" v-if="showFilter">
-      <p>กำลังพัฒนา</p>
+    <div class="filter" v-if="isShowFilter">
+      <div class="animate__animated animate__faster animate__fadeInDown">
+        <p>สี</p>
+        <div class="colors">
+          <img :class="{ active: filter.color == 'grass' }" @click="filter.color = 'grass'"
+            src="https://pocket.untapped.gg/images/card-colors/grass.png">
+          <img :class="{ active: filter.color == 'fire' }" @click="filter.color = 'fire'"
+            src="https://pocket.untapped.gg/images/card-colors/fire.png">
+          <img :class="{ active: filter.color == 'water' }" @click="filter.color = 'water'"
+            src="https://pocket.untapped.gg/images/card-colors/water.png">
+          <img :class="{ active: filter.color == 'lightning' }" @click="filter.color = 'lightning'"
+            src="https://pocket.untapped.gg/images/card-colors/lightning.png">
+          <img :class="{ active: filter.color == 'psychic' }" @click="filter.color = 'psychic'"
+            src="https://pocket.untapped.gg/images/card-colors/psychic.png">
+          <img :class="{ active: filter.color == 'fighting' }" @click="filter.color = 'fighting'"
+            src="https://pocket.untapped.gg/images/card-colors/fighting.png">
+          <img :class="{ active: filter.color == 'darkness' }" @click="filter.color = 'darkness'"
+            src="https://pocket.untapped.gg/images/card-colors/darkness.png">
+          <img :class="{ active: filter.color == 'metal' }" @click="filter.color = 'metal'"
+            src="https://pocket.untapped.gg/images/card-colors/metal.png">
+          <img :class="{ active: filter.color == 'dragon' }" @click="filter.color = 'dragon'"
+            src="https://pocket.untapped.gg/images/card-colors/dragon.png">
+          <img :class="{ active: filter.color == 'colorless' }" @click="filter.color = 'colorless'"
+            src="https://pocket.untapped.gg/images/card-colors/colorless.png">
+        </div>
+        <div class="btns">
+          <p class="btn" @click="searchWithFilter()">ค้นหาด้วยตัวกรอง</p>
+          <p class="btn reset" @click="filter.color = ''">ล้างตัวกรอง</p>
+        </div>
+      </div>
     </div>
 
     <div class="results">
@@ -36,10 +64,19 @@
 import { inject, provide, ref, watch } from 'vue';
 import axios from 'axios';
 
-const showFilter = ref(false)
 const name = ref('')
 const results = inject('results')
 const deck = inject('deck')
+const isShowFilter = ref(false)
+
+const filter = ref({
+  color: ''
+})
+
+const searchWithFilter = () => {
+  const link = `https://pocket.limitlesstcg.com/api/dm/search?q=${name.value}%20${filter.value.color ? 'type%3A' + filter.value.color : ''}&lang=en`
+  axios.get(link).then(res => { results.value = res.data })
+}
 
 watch(name, (text) => {
   const link = `https://pocket.limitlesstcg.com/api/dm/search?q=${text}%20&lang=en`
@@ -49,6 +86,10 @@ watch(name, (text) => {
     results.value = []
   }
 })
+
+const showFilter = () => {
+  isShowFilter.value = !isShowFilter.value
+}
 
 const addCard = (card) => {
   const cards = deck.value.cards
@@ -100,6 +141,40 @@ input {
 .filter {
   background-color: black;
   padding: 1em;
+  overflow: hidden;
+}
+
+.colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.colors img {
+  height: 2em;
+  width: auto;
+  filter: grayscale(.8);
+}
+
+.colors img.active {
+  scale: 1.2;
+  filter: none;
+}
+
+.btns {
+  display: flex;
+  gap: .5em;
+}
+
+.btns .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.reset {
+  border: 2px solid var(--error-color);
+  color: #ffcccc;
+  background-color: transparent;
 }
 
 .results ul {
