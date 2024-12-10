@@ -63,6 +63,39 @@ const formatter = (list) => {
   return txt;
 }
 
+const decoder = (d) => {
+  const replacer = [
+    "card_type:t",
+    "pokemon:pk",
+    "set:s",
+    "number:no",
+    "name:n",
+    "trainer:tr",
+    "cardID:ci",
+    "cards:c"
+  ]
+
+  let dd = atob(d)
+
+  replacer.forEach(item => {
+    const word = item.split(":")[0]
+    const key = item.split(":")[1]
+
+    dd = dd.replaceAll(`"${key}"`, `"${word}"`)
+  })
+
+  dd = JSON.parse(dd)
+
+  dd.cards.forEach(card => {
+    card.cardID = `${card.set}_${String(card.number).padStart(3, '0')}`
+  })
+
+  console.log(dd);
+  localStorage.setItem('deck', JSON.stringify(dd))
+
+  window.location.href = window.location.href.split("share=")[0]
+}
+
 provide('deckText', deckText)
 provide('deck', deck)
 provide('results', results)
@@ -70,6 +103,12 @@ provide('results', results)
 onMounted(() => {
   if (localStorage.getItem('deck')) {
     deck.value = JSON.parse(localStorage.getItem('deck'))
+  }
+
+  const d = window.location.href.split("share=")[1]
+
+  if (d) {
+    decoder(d)
   }
 })
 </script>

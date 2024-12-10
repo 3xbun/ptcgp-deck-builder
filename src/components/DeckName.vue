@@ -16,8 +16,12 @@
     <div class="btn success animate__animated animate__rubberBand" v-if="isCopied">
       <i class="fa-thin fa-circle-check"></i>
     </div>
-    <div class="btn copy" v-else @click="copyToClipboard">
-      <i class="fa-light fa-copy"></i>
+    <div class="btn copy" v-else @click="share()"><i class="fa-light fa-share-from-square"></i>
+      <div class="dropdown" v-if="showDropDown">
+        <p @click="shareAsText">คัดลอกเป็นข้อความ</p>
+        <hr>
+        <p @click="shareAslink">แชร์ผ่านลิงก์</p>
+      </div>
     </div>
   </header>
 </template>
@@ -28,6 +32,7 @@ import { inject, ref } from 'vue';
 const deck = inject('deck')
 const deckText = inject('deckText')
 const isCopied = ref(false)
+const showDropDown = ref(false)
 
 const reset = () => {
   deck.value = {
@@ -42,18 +47,46 @@ const save = () => {
   localStorage.setItem('deck', JSON.stringify(deck.value))
 }
 
-const copyToClipboard = () => {
-  navigator.clipboard.writeText(deckText.value);
-  isCopied.value = true
-  setTimeout(() => {
-    const element = document.querySelector('div.success')
-    console.log(element);
-    element.classList.add('animate__bounceOut')
+const share = () => {
+  showDropDown.value = !showDropDown.value
+}
 
-    setTimeout(() => {
-      isCopied.value = false
-    }, 550);
-  }, 2000);
+const shareAslink = () => {
+  const dd = JSON.parse(JSON.stringify(deck.value));
+
+  dd.cards.forEach(card => {
+    delete card.cardID
+    delete card.special
+  })
+  let d = JSON.stringify(dd);
+
+  const replacer = [
+    "card_type:t",
+    "pokemon:pk",
+    "set:s",
+    "number:no",
+    "name:n",
+    "trainer:tr",
+    "cardID:ci",
+    "cards:c"
+  ]
+
+  replacer.forEach(item => {
+    const word = item.split(":")[0]
+    const key = item.split(":")[1]
+    d = d.replaceAll(`"${word}"`, `"${key}"`)
+  });
+
+  const enc = btoa(d)
+
+  // showDropDown.value = false
+  navigator.clipboard.writeText(window.location.href + "share=" + enc);
+}
+
+const shareAsText = () => {
+  // showDropDown.value = false
+  navigator.clipboard.writeText(deckText.value);
+  console.log(showDropDown.value);
 }
 </script>
 
@@ -96,6 +129,7 @@ input {
   width: 10%;
   border: 2px solid var(--primary-text);
   color: var(--primary-text);
+  position: relative
 }
 
 .success {
@@ -103,5 +137,30 @@ input {
   border: 2px solid transparent;
   background-color: #59b259;
   color: inherit;
+}
+
+.dropdown {
+  position: absolute;
+  margin-top: .5em;
+  top: 100%;
+  right: 0;
+  width: 10em;
+  background-color: var(--card-area-color);
+  border-radius: .5em;
+  z-index: 99;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--divider-color);
+}
+
+.dropdown p {
+  text-align: left;
+  padding: .5em;
+}
+
+.dropdown p:hover {
+  background-color: var(--divider-color);
 }
 </style>
