@@ -98,9 +98,9 @@ const shareAsText = () => {
 
 const showNotification = (value) => {
   noti.value = value
-  // setTimeout(() => {
-  //   noti.value = ""
-  // }, 2000);
+  setTimeout(() => {
+    noti.value = ""
+  }, 2000);
 }
 </script>
 
