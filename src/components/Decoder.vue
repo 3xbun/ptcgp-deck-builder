@@ -4,7 +4,6 @@
     <div class="input">
       <input type="text" placeholder="Add link" v-model="l">
       <i @click="links.push(l)" class="fa-regular fa-plus"></i>
-      {{ l }}
     </div>
     <div v-for="(link, index) in links" class="links">
       <div class="item">
