@@ -1,13 +1,16 @@
 <template>
   <div class="container">
-    <h3>
-      ตัวสร้างเด็ค Pokémon TCG Pocket
-      <span> v{{ version }}</span>
-    </h3>
+    <Decoder v-if="href == '/decoder'" />
+    <div id="app" v-else>
+      <h3>
+        ตัวสร้างเด็ค Pokémon TCG Pocket
+        <span> v{{ version }}</span>
+      </h3>
 
-    <DeckName />
-    <DeckCards />
-    <AddCards />
+      <DeckName />
+      <DeckCards />
+      <AddCards />
+    </div>
   </div>
 </template>
 
@@ -17,6 +20,7 @@ import { computed, onMounted, provide, ref } from 'vue';
 import DeckName from './components/DeckName.vue';
 import DeckCards from './components/DeckCards.vue';
 import AddCards from './components/AddCards.vue';
+import Decoder from './components/Decoder.vue';
 
 const deck = ref({
   name: '',
@@ -24,6 +28,7 @@ const deck = ref({
 })
 
 const results = ref([])
+const href = window.location.pathname
 const deckText = computed(() => {
   const d = deck.value
   const DeckName = d.name || "ไม่มีชื่อ"
@@ -62,7 +67,7 @@ const formatter = (list) => {
   return txt;
 }
 
-const decoder = (d, copy) => {
+const decoder = (d) => {
   const replacer = [
     "card_type:t",
     "pokemon:pk",
@@ -89,15 +94,8 @@ const decoder = (d, copy) => {
     card.cardID = `${card.set}_${String(card.number).padStart(3, '0')}`
   })
 
-  if (copy) {
-    console.log("object");
-    localStorage.setItem('deck', JSON.stringify(dd))
-    navigator.clipboard.writeText(deckText.value);
-    window.location.href = window.location.href.split("copy=")[0]
-  } else {
-    localStorage.setItem('deck', JSON.stringify(dd))
-    window.location.href = window.location.href.split("share=")[0]
-  }
+  localStorage.setItem('deck', JSON.stringify(dd))
+  window.location.href = window.location.href.split("share=")[0]
 }
 
 provide('deckText', deckText)
@@ -113,11 +111,7 @@ onMounted(() => {
   const dc = window.location.href.split("copy=")[1]
 
   if (d) {
-    decoder(d, false)
-  }
-
-  if (dc) {
-    decoder(dc, true)
+    decoder(d)
   }
 })
 </script>
