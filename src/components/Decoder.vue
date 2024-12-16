@@ -17,7 +17,7 @@
 <script setup>
 import { ref } from 'vue';
 const links = ref([])
-const l = ""
+const l = ref("")
 
 const decoder = (link) => {
   const d = link.split("share=")[1]
