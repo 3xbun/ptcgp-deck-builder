@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-
     <h3>
       ตัวสร้างเด็ค Pokémon TCG Pocket
       <span> v{{ version }}</span>
@@ -63,7 +62,7 @@ const formatter = (list) => {
   return txt;
 }
 
-const decoder = (d) => {
+const decoder = (d, copy) => {
   const replacer = [
     "card_type:t",
     "pokemon:pk",
@@ -90,10 +89,15 @@ const decoder = (d) => {
     card.cardID = `${card.set}_${String(card.number).padStart(3, '0')}`
   })
 
-  console.log(dd);
-  localStorage.setItem('deck', JSON.stringify(dd))
-
-  window.location.href = window.location.href.split("share=")[0]
+  if (copy) {
+    console.log("object");
+    localStorage.setItem('deck', JSON.stringify(dd))
+    navigator.clipboard.writeText(deckText.value);
+    window.location.href = window.location.href.split("copy=")[0]
+  } else {
+    localStorage.setItem('deck', JSON.stringify(dd))
+    window.location.href = window.location.href.split("share=")[0]
+  }
 }
 
 provide('deckText', deckText)
@@ -106,9 +110,14 @@ onMounted(() => {
   }
 
   const d = window.location.href.split("share=")[1]
+  const dc = window.location.href.split("copy=")[1]
 
   if (d) {
-    decoder(d)
+    decoder(d, false)
+  }
+
+  if (dc) {
+    decoder(dc, true)
   }
 })
 </script>
