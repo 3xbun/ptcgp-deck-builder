@@ -27,7 +27,7 @@ const results = inject('results')
 const showDeck = ref(true)
 
 const filterDeck = computed(() => {
-  const cards = deck.value.cards.sort((a, b) => (a.card_type > b.card_type) ? 1 : ((b.card_type > a.card_type) ? -1 : 0)).sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+  const cards = deck.value.cards
 
   const uniq = [];
 
@@ -37,7 +37,7 @@ const filterDeck = computed(() => {
     }
   });
 
-  return uniq
+  return uniq.sort((a, b) => (a.card_type > b.card_type) ? 1 : ((b.card_type > a.card_type) ? -1 : 0));
 })
 
 const getImage = (card) => {
